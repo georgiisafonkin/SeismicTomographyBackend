@@ -15,5 +15,6 @@ def create_sqlite_async_session(
     )
     return engine, async_sessionmaker(engine, expire_on_commit=False)
 
+engine, session_local = create_sqlite_async_session()
 
 Base = declarative_base()

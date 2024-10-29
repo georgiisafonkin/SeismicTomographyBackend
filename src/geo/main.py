@@ -64,9 +64,9 @@ def create_user(db: Session, user: UserCreate):
     db.commit()
     return "complete"
 
-users_route = APIRouter(prefix="/users", tags=["Users"])
+users_router = APIRouter(prefix="/users", tags=["Users"])
 
-@users_route.post("/register", response_model=UserCreate)
+@users_router.post("/register", response_model=UserCreate)
 def register_user(user: UserCreate, db: Session = Depends(get_db)):
     db_user = get_user_by_username(db, username=user.username)
     if db_user:
@@ -126,7 +126,7 @@ class ApplicationFactory:
         api_router.include_router(geo_router)
         api_router.include_router(stats_router)
         app.include_router(api_router)
-        app.include_router(users_route) # TODO add this route by myself
+        app.include_router(users_router) # TODO add this route by myself
 
         logging.debug("Регистрация обработчиков исключений")
         app.add_exception_handler(APIError, handle_api_error)

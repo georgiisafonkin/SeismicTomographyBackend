@@ -6,7 +6,8 @@ from sqlalchemy import Column, Integer, String, VARCHAR, DATETIME
 
 
 class Users(Base):
-    __tablename__ = 'users'
+    __tablename__ = "users"
+
     id = Column(GUID(), primary_key=True, default=uuid.uuid4)
     username = Column(VARCHAR(32), unique=True, nullable=False)
     hashed_password = Column(VARCHAR(128), nullable=False)
