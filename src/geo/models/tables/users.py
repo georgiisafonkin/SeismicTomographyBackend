@@ -1,12 +1,18 @@
+import uuid
+
 from geo.db import Base
-from sqlalchemy import Column, Integer, String
+from geo.utils.sa import GUID
+from sqlalchemy import Column, Integer, String, VARCHAR, DATETIME
 
 
 class Users(Base):
     __tablename__ = 'users'
-    id = Column(Integer, primary_key=True, index=True)
-    username = Column(String, unique=True, index=True)
-    hashed_password = Column(String)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
+    username = Column(VARCHAR(32), unique=True, nullable=False)
+    hashed_password = Column(VARCHAR(128), nullable=False)
+    role = Column(VARCHAR(32), nullable=False)
+    sign_up_date = Column(DATETIME, nullable=False)
+    last_login_date = Column(DATETIME, nullable=False)
 
 
 # create the database tables if they don't exist
