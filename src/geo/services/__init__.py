@@ -5,6 +5,7 @@ from geo.services.geo import GeoApplicationService
 from geo.services.stats import StatsApplicationService
 from geo.services.storage import FileStorage
 from geo.services.task import TaskApplicationService
+from geo.services.users import UsersApplicationService
 from geo.utils.queue import Queue
 
 
@@ -41,3 +42,7 @@ class ServiceFactory:
     @property
     def stats(self) -> StatsApplicationService:
         return StatsApplicationService(config=self._config)
+
+    @property
+    def users(self) -> UsersApplicationService:
+        return UsersApplicationService()
