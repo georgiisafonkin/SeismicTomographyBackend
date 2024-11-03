@@ -2,7 +2,7 @@
 name = "geo-service"
 version = "0.1.0"
 description = ""
-authors = ["JKearnsl <boyarshinovn@gmail.com>"]
+authors = ["JKearnsl <boyarshinovn@gmail.com>", "georgiisafonkin <georgiisafonk@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]

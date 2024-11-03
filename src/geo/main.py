@@ -4,12 +4,11 @@ from datetime import timedelta
 from fastapi import FastAPI, APIRouter
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
-# imports for authentication
-from fastapi.security import OAuth2PasswordBearer
+
 
 from geo.config import load_env_config
 from geo.controllers import (
-    task_router, stats_router, geo_router, users_router,
+    task_router, stats_router, geo_router, users_router
 )
 from geo.controllers.proc import proc_router
 from geo.exceptions import (
@@ -67,8 +66,7 @@ class ApplicationFactory:
         app.add_exception_handler(RequestValidationError, handle_pydantic_error)
 
         # some additions for authentication
-        oauth2_sceme = OAuth2PasswordBearer(tokenUrl="/token")
-        origins = ["http://localhost:3000"]
+        origins = ["http://localhost:8080"]
         app.add_middleware(
             CORSMiddleware,
             allow_origins=origins,

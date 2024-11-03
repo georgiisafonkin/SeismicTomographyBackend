@@ -1,11 +1,11 @@
 import uuid
 
-from geo.db import Base
+from geo.db import Base, engine
 from geo.utils.sa import GUID
 from sqlalchemy import Column, Integer, String, VARCHAR, DATETIME
 
 
-class Users(Base):
+class UserCreate(Base):
     __tablename__ = "users"
 
     id = Column(GUID(), primary_key=True, default=uuid.uuid4)
@@ -16,5 +16,5 @@ class Users(Base):
     last_login_date = Column(DATETIME, nullable=False)
 
 
-# create the database tables if they don't exist
-# Users.metadata.create_all(bind=engine)
+# synchronous func can't be completed in async context
+# UserCreate.metadata.create_all(bind=engine)

@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 class Users(BaseModel):
     username: str
-    hashed_password: str
+    password: str
     role: str
     sign_up_date: datetime
     last_login_date: datetime

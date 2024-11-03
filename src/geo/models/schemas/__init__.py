@@ -14,3 +14,5 @@ from .detection import Phase
 
 from .event import Event
 from .station import Station
+
+from .users import Users
