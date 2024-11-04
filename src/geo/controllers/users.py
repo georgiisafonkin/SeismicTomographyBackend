@@ -1,7 +1,7 @@
 from datetime import timedelta
 
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm, status
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from geo.services import users
 

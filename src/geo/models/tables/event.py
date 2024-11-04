@@ -9,6 +9,7 @@ from geo.utils.sa import GUID
 
 class Event(Base):
     __tablename__ = "events"
+    __table_args__ = {'extend_existing': True}
 
     id = Column(GUID(), primary_key=True, default=uuid.uuid4)
     time = Column(DateTime(timezone=True), nullable=False)

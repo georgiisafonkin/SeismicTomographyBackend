@@ -1,3 +1,5 @@
+from geo.db import Base
+
 from .task import Task
 from .station import Station
 from .event import Event
