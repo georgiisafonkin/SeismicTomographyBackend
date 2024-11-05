@@ -45,4 +45,4 @@ class ServiceFactory:
 
     @property
     def users(self) -> UsersApplicationService:
-        return UsersApplicationService()
+        return UsersApplicationService(lazy_session=self._lazy_session,)

@@ -1,13 +1,14 @@
 from http.client import HTTPException
 
-from sqlalchemy.orm import Session, AsyncSession, async_sessionmaker
+from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 from jose import JWTError, jwt
 from datetime import datetime, timedelta, timezone
 from passlib.context import CryptContext
 from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
 
-from geo.exceptions import NotFound
+from geo.exceptions import NotFound, AlreadyExists
 from geo.repositories.users import UsersRepo
 from geo.models.schemas.users import Users
 from geo.models.tables.users import UserCreate
@@ -26,44 +27,47 @@ class UsersApplicationService:
     ):
         self._lazy_session = lazy_session
 
-    oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/token")
-
-    @staticmethod
-    async def get_user_by_username(self, username: str) -> Users:
-        # return db.query(UserCreate).filter(UserCreate.username == username).first()
+    async def is_there_this_user(self, username: str) -> Users:
         async with self._lazy_session() as session:
             users_repo = UsersRepo(session)
             user = await users_repo.get(username=username)
         if not user:
-            raise NotFound(f"Пользователь с именем {username!r} не найден")
-        return UserCreate.model_validate(user)
+            return False
+        return True
 
-    @staticmethod
     async def create_user(self, db: Session, user: Users):
         # hashed_password = pwd_context.hash(user.password)
         # db_user = UserCreate(username=user.username, hashed_password=hashed_password, datetime.now())
         # db.add(db_user)
         # db.commit()
         # return "complete"
+
+        hashed = pwd_context.hash(user.password)
+
         async with self._lazy_session() as session:
             users_repo = UsersRepo(session)
             new_user = await users_repo.create(
                 username=user.username,
-                hashed_password=user.password,
+                hashed_password=hashed,
                 sign_up_date=datetime.now(timezone.utc),
                 # created_at=datetime.datetime.now(tz=datetime.UTC)
             )
         return UserCreate.model_validate(new_user)
 
+    async def register_user(self, username: str, password: str):
+        if self.is_there_this_user:
+            raise AlreadyExists("Пользователь с таким именем уже существует")
+        return await self.create_user(Users(username=username, password=password, role="default"))
 
-    @staticmethod
     async def authenticate_user(self, db: Session, username: str, password: str):
         async with self._lazy_session() as session:
             users_repo = UsersRepo(session)
             user = await users_repo.get(username=username)
             if not user:
                 return False
-            if not pwd_context.verify(password, user.hashed_password): # TODO почему сравниваем пароль с хешированным паролем
+            if not pwd_context.verify(password, user.hashed_password):
+                return False
+            return user
         # user = db.query(UserCreate).filter(UserCreate.username == username).first()
         # if not user:
         #     return False
@@ -81,6 +85,8 @@ class UsersApplicationService:
         to_encode.update({"exp": expire})
         encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
         return encoded_jwt
+
+    oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/token")
 
     @staticmethod
     async def verify_token(token: str = Depends(oauth2_scheme)):

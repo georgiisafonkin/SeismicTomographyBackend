@@ -3,21 +3,28 @@ from datetime import timedelta
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from geo.services import users
+
+from geo import services
+from geo.services import users, ServiceFactory
 
 from geo.db import get_db
+from geo.services.di import get_services
+from geo.views.user import UserResponse
 from src.geo.models.schemas.users import Users
 from geo.services.users import UsersApplicationService, ACCESS_TOKEN_EXPIRE_MINUTES
 
 users_router = APIRouter(prefix="/users", tags=["Users"])
 
 @users_router.post("/register", response_model=Users)
-async def register_user(user: Users, db: Session = Depends(get_db)):
-    db_user = UsersApplicationService.get_user_by_username(db, username=user.username)
-    print(db_user)
-    if db_user:
-        raise HTTPException(status_code=400, detail="Username already exists")
-    return UsersApplicationService.create_user(db=db, user=user)
+async def register_user(username: str, password: str, services: ServiceFactory = Depends(get_services)):
+
+    '''
+
+    Регистрация нового пользователя
+
+    '''
+
+    return UserResponse(content= await services.users.register_user(username=username, password=password))
 
 @users_router.post("/token", response_model=Users)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
