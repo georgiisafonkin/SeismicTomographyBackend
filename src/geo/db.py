@@ -15,8 +15,6 @@ def create_sqlite_async_session(
     )
     return engine, async_sessionmaker(engine, expire_on_commit=False)
 
-engine, session_local = create_sqlite_async_session("test.db")
-Base = declarative_base()
 
 def get_db():
     db = session_local()
@@ -24,3 +22,7 @@ def get_db():
         yield db
     finally:
         db.close()
+
+
+engine, session_local = create_sqlite_async_session("test.db")
+Base = declarative_base()

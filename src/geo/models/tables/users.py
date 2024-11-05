@@ -1,8 +1,8 @@
 import uuid
 
-from geo.db import Base, engine
+from geo.db import Base
 from geo.utils.sa import GUID
-from sqlalchemy import Column, Integer, String, VARCHAR, DATETIME
+from sqlalchemy import Column, VARCHAR, DATETIME
 
 
 class UserCreate(Base):
@@ -15,7 +15,3 @@ class UserCreate(Base):
     role = Column(VARCHAR(32), nullable=False)
     sign_up_date = Column(DATETIME, nullable=False)
     last_login_date = Column(DATETIME, nullable=False)
-
-
-# synchronous func can't be completed in async context
-# UserCreate.metadata.create_all(bind=engine)

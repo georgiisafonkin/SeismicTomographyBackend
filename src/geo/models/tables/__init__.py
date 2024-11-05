@@ -1,7 +1,4 @@
-from sqlalchemy.ext.declarative import declarative_base
-
-Base = declarative_base()
-
+from geo.db import Base
 
 from .task import Task
 from .station import Station

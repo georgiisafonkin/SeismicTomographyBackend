@@ -25,7 +25,7 @@ WORKDIR /app/code
 
 # Устанавливаем переменные окружения
 ENV DEBUG=0
-ENV FDSN_BASE="http://84.237.52.214:8080"
+ENV FDSN_BASE="http://84.237.52.214:8000"
 ENV HPS_ST3D_EXEC="/app/HPS_ST3D/bin/HPS_ST3D"
 ENV PYTHONPATH=/app/code/src
 

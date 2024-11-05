@@ -21,12 +21,12 @@ class UsersApplicationService:
     oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/token")
 
     @staticmethod
-    def get_user_by_username(db: Session, username: str) -> Users:
+    async def get_user_by_username(db: Session, username: str) -> Users:
         return db.query(UserCreate).filter(UserCreate.username == username).first()
 
 
     @staticmethod
-    def create_user(db: Session, user: Users):
+    async def create_user(db: Session, user: Users):
         hashed_password = pwd_context.hash(user.password)
         db_user = UserCreate(username=user.username, hashed_password=hashed_password)
         db.add(db_user)
@@ -34,7 +34,7 @@ class UsersApplicationService:
         return "complete"
 
     @staticmethod
-    def authenticate_user(db: Session, username: str, password: str):
+    async def authenticate_user(db: Session, username: str, password: str):
         user = db.query(UserCreate).filter(UserCreate.username == username).first()
         if not user:
             return False
@@ -43,7 +43,7 @@ class UsersApplicationService:
         return user
 
     @staticmethod
-    def create_access_token(data: dict, expires_delta: timedelta = None):
+    async def create_access_token(data: dict, expires_delta: timedelta = None):
         to_encode = data.copy()
         if expires_delta:
             expire = datetime.now(timezone.UTC) + expires_delta
@@ -54,7 +54,7 @@ class UsersApplicationService:
         return encoded_jwt
 
     @staticmethod
-    def verify_token(token: str = Depends(oauth2_scheme)):
+    async def verify_token(token: str = Depends(oauth2_scheme)):
         try:
             payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
             username: str = payload.get("sub")
