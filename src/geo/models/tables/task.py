@@ -12,7 +12,6 @@ class Task(Base):
     __tablename__ = "tasks"
     __table_args__ = {'extend_existing': True}
 
-
     id = Column(GUID(), primary_key=True, default=uuid.uuid4)
     state = Column(Enum(TaskState), default=TaskState.PLAIN, nullable=False)
     step = Column(Enum(TaskStep), nullable=True)

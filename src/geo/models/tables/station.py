@@ -11,7 +11,6 @@ class Station(Base):
     __tablename__ = "stations"
     __table_args__ = {'extend_existing': True}
 
-
     id = Column(GUID(), primary_key=True, default=uuid.uuid4)
     network = Column(VARCHAR(32), nullable=False)
     station = Column(VARCHAR(32), nullable=False)
