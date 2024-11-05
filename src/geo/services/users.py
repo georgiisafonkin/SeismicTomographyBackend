@@ -35,7 +35,7 @@ class UsersApplicationService:
             return False
         return True
 
-    async def create_user(self, db: Session, user: Users):
+    async def create_user(self, user: Users):
         # hashed_password = pwd_context.hash(user.password)
         # db_user = UserCreate(username=user.username, hashed_password=hashed_password, datetime.now())
         # db.add(db_user)
@@ -50,14 +50,13 @@ class UsersApplicationService:
                 username=user.username,
                 hashed_password=hashed,
                 sign_up_date=datetime.now(timezone.utc),
-                # created_at=datetime.datetime.now(tz=datetime.UTC)
             )
         return UserCreate.model_validate(new_user)
 
-    async def register_user(self, username: str, password: str):
-        if self.is_there_this_user:
+    async def register_user(self, user: Users):
+        if await self.is_there_this_user(username=user.username):
             raise AlreadyExists("Пользователь с таким именем уже существует")
-        return await self.create_user(Users(username=username, password=password, role="default"))
+        return await self.create_user(user=user)
 
     async def authenticate_user(self, db: Session, username: str, password: str):
         async with self._lazy_session() as session:

@@ -5,6 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from geo import services
+from geo.models.tables import UserCreate
 from geo.services import users, ServiceFactory
 
 from geo.db import get_db
@@ -16,7 +17,7 @@ from geo.services.users import UsersApplicationService, ACCESS_TOKEN_EXPIRE_MINU
 users_router = APIRouter(prefix="/users", tags=["Users"])
 
 @users_router.post("/register", response_model=Users)
-async def register_user(username: str, password: str, services: ServiceFactory = Depends(get_services)):
+async def register_user(user: Users, services: ServiceFactory = Depends(get_services)):
 
     '''
 
@@ -24,7 +25,7 @@ async def register_user(username: str, password: str, services: ServiceFactory =
 
     '''
 
-    return UserResponse(content= await services.users.register_user(username=username, password=password))
+    return UserResponse(content= await services.users.register_user(user=user))
 
 @users_router.post("/token", response_model=Users)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
