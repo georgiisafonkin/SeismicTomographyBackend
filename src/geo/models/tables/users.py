@@ -7,6 +7,7 @@ from sqlalchemy import Column, Integer, String, VARCHAR, DATETIME
 
 class UserCreate(Base):
     __tablename__ = "users"
+    __table_args__ = {'extend_existing': True}
 
     id = Column(GUID(), primary_key=True, default=uuid.uuid4)
     username = Column(VARCHAR(32), unique=True, nullable=False)
