@@ -77,3 +77,6 @@ vtk==9.3.1 ; python_version >= "3.12" and python_version < "4.0"
 wheel==0.44.0 ; python_version >= "3.12" and python_version < "4.0"
 wslink==2.2.1 ; python_version >= "3.12" and python_version < "4.0"
 yarl==1.17.0 ; python_version >= "3.12" and python_version < "4.0"
+
+#manual add
+python-multipart ; python_version >= "3.12" and python_version < "4.0"
