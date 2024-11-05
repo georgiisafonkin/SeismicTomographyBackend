@@ -28,7 +28,7 @@ class UsersApplicationService:
     @staticmethod
     async def create_user(db: Session, user: Users):
         hashed_password = pwd_context.hash(user.password)
-        db_user = UserCreate(username=user.username, hashed_password=hashed_password)
+        db_user = UserCreate(username=user.username, hashed_password=hashed_password, datetime.now())
         db.add(db_user)
         db.commit()
         return "complete"
