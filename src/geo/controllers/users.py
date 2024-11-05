@@ -4,20 +4,18 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
-from geo import services
-from geo.models.tables import UserCreate
-from geo.services import users, ServiceFactory
+from geo.services import ServiceFactory
 
 from geo.db import get_db
 from geo.services.di import get_services
 from geo.views.user import UserResponse
-from src.geo.models.schemas.users import Users
+from src.geo.models.schemas.users import UserModel
 from geo.services.users import UsersApplicationService, ACCESS_TOKEN_EXPIRE_MINUTES
 
 users_router = APIRouter(prefix="/users", tags=["Users"])
 
-@users_router.post("/register", response_model=Users)
-async def register_user(user: Users, services: ServiceFactory = Depends(get_services)):
+@users_router.post("/register", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
+async def register_user(user: UserModel, services: ServiceFactory = Depends(get_services)):
 
     '''
 
@@ -27,7 +25,7 @@ async def register_user(user: Users, services: ServiceFactory = Depends(get_serv
 
     return UserResponse(content= await services.users.register_user(user=user))
 
-@users_router.post("/token", response_model=Users)
+@users_router.post("/token", response_model=UserModel)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     user = UsersApplicationService.authenticate_user(db, form_data.username, form_data.password)
     if not user:
@@ -42,7 +40,7 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
                                                                )
     return {"access_token": access_token, "token_type": "bearer"}
 
-@users_router.get("/verify-token/{token}", response_model=Users)
+@users_router.get("/verify-token/{token}", response_model=UserModel)
 async def verify_token(token: str, db: Session = Depends(get_db)):
     UsersApplicationService.verify_token(token=token)
     return {"message": "Token Verified"}

@@ -2,5 +2,5 @@ from geo.models import tables
 from geo.repositories.base import BaseRepository
 
 
-class UsersRepo(BaseRepository[tables.UserCreate]):
-    table = tables.UserCreate
+class UsersRepo(BaseRepository[tables.UserTable]):
+    table = tables.UserTable

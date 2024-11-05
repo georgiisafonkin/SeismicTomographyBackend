@@ -3,4 +3,4 @@ from geo.views import BaseView
 
 
 class UserResponse(BaseView):
-    content: schemas.users.Users
+    content: schemas.users.UserModel

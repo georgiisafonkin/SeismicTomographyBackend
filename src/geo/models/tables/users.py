@@ -5,7 +5,7 @@ from geo.utils.sa import GUID
 from sqlalchemy import Column, VARCHAR, DATETIME
 
 
-class UserCreate(Base):
+class UserTable(Base):
     __tablename__ = "users"
     __table_args__ = {'extend_existing': True} # TODO обязательно понять зачем это
 

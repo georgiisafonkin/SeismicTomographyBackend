@@ -10,8 +10,8 @@ from fastapi.security import OAuth2PasswordBearer
 
 from geo.exceptions import NotFound, AlreadyExists
 from geo.repositories.users import UsersRepo
-from geo.models.schemas.users import Users
-from geo.models.tables.users import UserCreate
+from geo.models.schemas.users import UserModel
+from geo.models.tables.users import UserTable
 
 # Our JWT secret and algorithm
 SECRET_KEY = "our_secret_key" # should be replaced for smth automatically generating
@@ -27,7 +27,7 @@ class UsersApplicationService:
     ):
         self._lazy_session = lazy_session
 
-    async def is_there_this_user(self, username: str) -> Users:
+    async def is_there_this_user(self, username: str) -> UserModel:
         async with self._lazy_session() as session:
             users_repo = UsersRepo(session)
             user = await users_repo.get(username=username)
@@ -35,13 +35,7 @@ class UsersApplicationService:
             return False
         return True
 
-    async def create_user(self, user: Users):
-        # hashed_password = pwd_context.hash(user.password)
-        # db_user = UserCreate(username=user.username, hashed_password=hashed_password, datetime.now())
-        # db.add(db_user)
-        # db.commit()
-        # return "complete"
-
+    async def create_user(self, user: UserModel):
         hashed = pwd_context.hash(user.password)
 
         async with self._lazy_session() as session:
@@ -49,11 +43,14 @@ class UsersApplicationService:
             new_user = await users_repo.create(
                 username=user.username,
                 hashed_password=hashed,
-                sign_up_date=datetime.now(timezone.utc),
+                role=user.role,
+                sign_up_date=user.sign_up_date,
+                last_login_date=user.last_login_date,
             )
-        return UserCreate.model_validate(new_user)
+            print(type(new_user))
+        return UserModel.model_validate(user)
 
-    async def register_user(self, user: Users):
+    async def register_user(self, user: UserModel):
         if await self.is_there_this_user(username=user.username):
             raise AlreadyExists("Пользователь с таким именем уже существует")
         return await self.create_user(user=user)
