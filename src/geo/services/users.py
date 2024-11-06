@@ -94,6 +94,6 @@ class UsersApplicationService:
             username: str = payload.get("sub")
             if username is None:
                 raise HTTPException(status_code=403, detail="Token is invalid or expire")
-            return payload
+            return AccessToken.model_validate({"access_token" : token, "token_type": "bearer"})
         except JWTError:
             raise HTTPException(status_code=403, detail="Token is invalid or expire")

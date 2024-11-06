@@ -46,4 +46,4 @@ async def verify_token(token: str, services: ServiceFactory = Depends(get_servic
 
     '''
 
-    return AccessTokenResponse(content= await services.users.verify_token(token=token))
+    return AccessTokenResponse(content= services.users.verify_token(token=token))
