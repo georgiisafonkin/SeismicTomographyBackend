@@ -8,6 +8,7 @@ from fastapi import Depends, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
 from geo.exceptions import AlreadyExists
+from geo.models.schemas import UserLoginModel
 from geo.repositories.users import UsersRepo
 from geo.models.schemas.users import UserRegisterModel
 from geo.models.tables.users import UserTable
@@ -64,32 +65,33 @@ class UsersApplicationService:
                 return False
             return user
 
-    async def login_and_authenticate_user(self, form_data: OAuth2PasswordRequestForm = Depends()):
-        if not await self.authenticate_user(form_data.username, form_data.password):
+    async def login_and_authenticate_user(self, form_data: OAuth2PasswordRequestForm):
+        user = await self.authenticate_user(form_data.username, form_data.password)
+        if not user:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                                 detail="Incorrect username or password",
                                 headers={"WWW-Authenticate": "Bearer"}
                                 )
-        access_token_expires = timedelta(minute=ACCESS_TOKEN_EXPIRE_MINUTES)
+        access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
         access_token = self.create_access_token(
             data={"sub": form_data.username},
             expires_delta=access_token_expires
         )
         return {"access_token": access_token, "token_type": "bearer"}
 
-    def create_access_token(data: dict, expires_delta: timedelta = None):
+    def create_access_token(self, data: dict, expires_delta: timedelta = None):
         to_encode = data.copy()
         if expires_delta:
-            expire = datetime.now(timezone.UTC) + expires_delta
+            expire = datetime.now(tz=timezone.utc) + expires_delta
         else:
-            expire = datetime.now(timezone.UTC) + timedelta(minutes=15)
+            expire = datetime.now(tz=timezone.utc) + timedelta(minutes=15)
         to_encode.update({"exp": expire})
         encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
         return encoded_jwt
 
     oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/token")
 
-    def verify_token(token: str = Depends(oauth2_scheme)):
+    def verify_token(self, token: str = Depends(oauth2_scheme)):
         try:
             payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
             username: str = payload.get("sub")

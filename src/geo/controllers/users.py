@@ -1,12 +1,15 @@
 from datetime import timedelta
+from os import access
 
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from fastapi import APIRouter, Depends, HTTPException, status
 
+from geo.models.schemas import AccessToken
 from geo.services import ServiceFactory
 
 from geo.services.di import get_services
-from geo.views.user import UserRegisterResponse
+from geo.views.token import AccessTokenResponse
+from geo.views.user import UserRegisterResponse, UserLoginResponse
 from src.geo.models.schemas.users import UserRegisterModel, UserLoginModel
 from geo.services.users import UsersApplicationService, ACCESS_TOKEN_EXPIRE_MINUTES
 
@@ -23,7 +26,7 @@ async def register_user(user: UserRegisterModel, services: ServiceFactory = Depe
 
     return UserRegisterResponse(content= await services.users.register_user(user=user))
 
-@users_router.post("/token", response_model=UserLoginModel)
+@users_router.post("/token", response_model=AccessTokenResponse)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), services: ServiceFactory = Depends(get_services)):
 
     '''
@@ -32,16 +35,14 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
 
     '''
 
-    return UserRegisterResponse(content= await services.users.login_and_authenticate_user())
+    return AccessTokenResponse(content= await services.users.login_and_authenticate_user(form_data=form_data))
 
-@users_router.get("/verify-token/{token}", response_model=UserRegisterModel)
-async def verify_token(token: str):
+@users_router.get("/verify-token/{token}", response_model=AccessTokenResponse)
+async def verify_token(token: str, services: ServiceFactory = Depends(get_services)):
 
     '''
 
     Проверка токена
 
     '''
-
-    UsersApplicationService.verify_token(token=token)
-    return {"message": "Token Verified"}
+    return AccessTokenResponse(content= await services.users.verify_token())
