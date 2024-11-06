@@ -1,6 +1,8 @@
 from geo.models import schemas
 from geo.views import BaseView
 
+class UserLoginResponse(BaseView):
+    content: schemas.users.UserLoginModel
 
-class UserResponse(BaseView):
-    content: schemas.users.UserModel
+class UserRegisterResponse(BaseView):
+    content: schemas.users.UserRegisterModel

@@ -9,7 +9,7 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
 from geo.exceptions import AlreadyExists
 from geo.repositories.users import UsersRepo
-from geo.models.schemas.users import UserModel
+from geo.models.schemas.users import UserRegisterModel
 from geo.models.tables.users import UserTable
 
 # Our JWT secret and algorithm
@@ -26,7 +26,7 @@ class UsersApplicationService:
     ):
         self._lazy_session = lazy_session
 
-    async def is_there_this_user(self, username: str) -> UserModel:
+    async def is_there_this_user(self, username: str) -> UserRegisterModel:
         async with self._lazy_session() as session:
             users_repo = UsersRepo(session)
             user = await users_repo.get(username=username)
@@ -34,7 +34,7 @@ class UsersApplicationService:
             return False
         return True
 
-    async def create_user(self, user: UserModel):
+    async def create_user(self, user: UserRegisterModel):
         hashed = pwd_context.hash(user.password)
 
         async with self._lazy_session() as session:
@@ -47,9 +47,9 @@ class UsersApplicationService:
                 last_login_date=user.last_login_date,
             )
             print(type(new_user))
-        return UserModel.model_validate(user)
+        return UserRegisterModel.model_validate(user)
 
-    async def register_user(self, user: UserModel):
+    async def register_user(self, user: UserRegisterModel):
         if await self.is_there_this_user(username=user.username):
             raise AlreadyExists("Пользователь с таким именем уже существует")
         return await self.create_user(user=user)

@@ -15,4 +15,5 @@ from .detection import Phase
 from .event import Event
 from .station import Station
 
-from .users import UserModel
+from .users import UserRegisterModel, UserLoginModel
+from .token import AccessToken
