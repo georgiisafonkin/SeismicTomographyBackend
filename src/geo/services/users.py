@@ -1,17 +1,14 @@
-from http.client import HTTPException
-
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 from jose import JWTError, jwt
 from datetime import datetime, timedelta, timezone
 from passlib.context import CryptContext
-from fastapi import Depends, status
+from fastapi import Depends, status, HTTPException
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
 from geo.exceptions import AlreadyExists
-from geo.models.schemas import UserLoginModel
+from geo.models.schemas import AccessToken
 from geo.repositories.users import UsersRepo
 from geo.models.schemas.users import UserRegisterModel
-from geo.models.tables.users import UserTable
 
 # Our JWT secret and algorithm
 SECRET_KEY = "our_secret_key" # should be replaced for smth automatically generating
@@ -77,7 +74,7 @@ class UsersApplicationService:
             data={"sub": form_data.username},
             expires_delta=access_token_expires
         )
-        return {"access_token": access_token, "token_type": "bearer"}
+        return AccessToken.model_validate({"access_token": access_token, "token_type": "bearer"})
 
     def create_access_token(self, data: dict, expires_delta: timedelta = None):
         to_encode = data.copy()
