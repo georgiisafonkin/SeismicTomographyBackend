@@ -1,14 +1,13 @@
 from http.client import HTTPException
 
-from sqlalchemy.orm import Session
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 from jose import JWTError, jwt
 from datetime import datetime, timedelta, timezone
 from passlib.context import CryptContext
-from fastapi import Depends
-from fastapi.security import OAuth2PasswordBearer
+from fastapi import Depends, status
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
-from geo.exceptions import NotFound, AlreadyExists
+from geo.exceptions import AlreadyExists
 from geo.repositories.users import UsersRepo
 from geo.models.schemas.users import UserModel
 from geo.models.tables.users import UserTable
@@ -55,7 +54,7 @@ class UsersApplicationService:
             raise AlreadyExists("Пользователь с таким именем уже существует")
         return await self.create_user(user=user)
 
-    async def authenticate_user(self, db: Session, username: str, password: str):
+    async def authenticate_user(self, username: str, password: str):
         async with self._lazy_session() as session:
             users_repo = UsersRepo(session)
             user = await users_repo.get(username=username)
@@ -64,15 +63,21 @@ class UsersApplicationService:
             if not pwd_context.verify(password, user.hashed_password):
                 return False
             return user
-        # user = db.query(UserCreate).filter(UserCreate.username == username).first()
-        # if not user:
-        #     return False
-        # if not pwd_context.verify(password, user.hashed_password):
-        #     return False
-        # return user
 
-    @staticmethod
-    async def create_access_token(data: dict, expires_delta: timedelta = None):
+    async def login_and_authenticate_user(self, form_data: OAuth2PasswordRequestForm = Depends()):
+        if not await self.authenticate_user(form_data.username, form_data.password):
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                                detail="Incorrect username or password",
+                                headers={"WWW-Authenticate": "Bearer"}
+                                )
+        access_token_expires = timedelta(minute=ACCESS_TOKEN_EXPIRE_MINUTES)
+        access_token = self.create_access_token(
+            data={"sub": form_data.username},
+            expires_delta=access_token_expires
+        )
+        return {"access_token": access_token, "token_type": "bearer"}
+
+    def create_access_token(data: dict, expires_delta: timedelta = None):
         to_encode = data.copy()
         if expires_delta:
             expire = datetime.now(timezone.UTC) + expires_delta
@@ -84,8 +89,7 @@ class UsersApplicationService:
 
     oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/token")
 
-    @staticmethod
-    async def verify_token(token: str = Depends(oauth2_scheme)):
+    def verify_token(token: str = Depends(oauth2_scheme)):
         try:
             payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
             username: str = payload.get("sub")
