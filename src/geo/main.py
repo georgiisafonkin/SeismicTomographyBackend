@@ -66,8 +66,7 @@ class ApplicationFactory:
         app.add_exception_handler(RequestValidationError, handle_pydantic_error)
 
         # some additions for authentication
-        origins = ["http://localhost:8000",
-                    "http://localhost:5173"]
+        origins = ["http://84.237.52.214:4030"]
         app.add_middleware(
             CORSMiddleware,
             allow_origins=origins,

@@ -13,7 +13,7 @@ from geo.models.schemas.users import UserRegisterModel
 # Our JWT secret and algorithm
 SECRET_KEY = "our_secret_key" # should be replaced for smth automatically generating
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 1
+ACCESS_TOKEN_EXPIRE_MINUTES = 1 # TODO replace back to 30 min after demonstration
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
