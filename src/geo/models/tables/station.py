@@ -1,6 +1,6 @@
 import uuid
 
-from sqlalchemy import Column, VARCHAR, DOUBLE, ForeignKey, DateTime, func
+from sqlalchemy import Column, String, Float, ForeignKey, DateTime, func
 from sqlalchemy.orm import relationship
 
 from geo.db import Base
@@ -11,12 +11,11 @@ class Station(Base):
     __tablename__ = "stations"
     __table_args__ = {'extend_existing': True}
 
-    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
-    network = Column(VARCHAR(32), nullable=False)
-    station = Column(VARCHAR(32), nullable=False)
-    x = Column(DOUBLE(), nullable=False)
-    y = Column(DOUBLE(), nullable=False)
-    z = Column(DOUBLE(), nullable=False)
+    code = Column(String, primary_key=True, nullable=False)
+    latitude = Column(Float, nullable=False)
+    longitude = Column(Float, nullable=False)
+    depth = Column(Float, nullable=False)
+    network_code = Column(String, nullable=False)
 
     detections = relationship("Detection", back_populates="station")
 
