@@ -1,3 +1,4 @@
+from src.geo.config import DB_LOGIN, DB_PASSWORD
 import uuid
 from typing import Generic, Type, TypeVar, Optional
 
@@ -8,6 +9,11 @@ T = TypeVar('T')
 
 
 class BaseRepository(Generic[T]):
+    SERVER_URL = 'http://84.237.52.214:4010'
+    EVENT = '/api/seis/event/'
+    STATION = '/api/seis/station/'
+    AUTH = (DB_LOGIN, DB_PASSWORD)
+    
     table: Type[T]
 
     def __init__(self, session: AsyncSession):

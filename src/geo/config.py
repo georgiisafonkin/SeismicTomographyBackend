@@ -8,6 +8,8 @@ logger = getLogger(__name__)
 DEBUG_ENV = "DEBUG"
 FDSN_BASE_ENV = "FDSN_BASE"
 HPS_ST3D_EXEC_ENV = "HPS_ST3D_EXEC"
+DB_LOGIN = "DB_LOGIN"
+DB_PASSWORD = "DB_PASSWORD"
 
 
 class ConfigParseError(ValueError):
@@ -19,6 +21,8 @@ class Config:
     DEBUG: bool
     FDSN_BASE: str
     HPS_ST3D_EXEC: str
+    DB_LOGIN: str
+    DB_PASSWORD: str
 
 
 def to_bool(value) -> bool:
@@ -56,4 +60,6 @@ def load_env_config(env_file: str | os.PathLike = None) -> Config:
         DEBUG=to_bool(get_str_env(DEBUG_ENV)),
         FDSN_BASE=get_str_env(FDSN_BASE_ENV),
         HPS_ST3D_EXEC=get_str_env(HPS_ST3D_EXEC_ENV)
+        DB_LOGIN=get_str_env(DB_LOGIN)
+        DB_PASSWORD=get_str_env(DB_PASSWORD)
     )
