@@ -1,7 +1,8 @@
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
-from src.geo.models.schemas.station import StationsRequest, Station
+from src.geo.models.schemas.station import StationsRequest, StationSchema
 from src.geo.repositories.station import StationRepo
 from src.geo.config import logger
+from typing import List
 
 class StationApplicationService:
     def __init__(
@@ -10,7 +11,7 @@ class StationApplicationService:
     ):
         self._lazy_session = lazy_session
 
-    async def fetch_area_stations(self, station_request: StationsRequest):
+    async def fetch_area_stations(self, station_request: StationsRequest) -> List[StationSchema]:
         async with self._lazy_session() as session:
             station_repo = StationRepo(session)
             stations = await station_repo.fetch_station_by_network(station_request=station_request)

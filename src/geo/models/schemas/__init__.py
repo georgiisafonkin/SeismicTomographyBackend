@@ -13,9 +13,9 @@ from .detection import Detection
 from .detection import Phase
 
 from .event import Event
-from .station import Station
+from .station import StationSchema
 
 from .users import UserRegisterModel, UserLoginModel
 from .token import AccessToken
 
-from .station import Station, StationsRequest
+from .station import StationSchema, StationsRequest

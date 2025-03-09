@@ -3,4 +3,4 @@ from geo.models import schemas
 
 
 class StationsResponse(BaseView):
-    content: list[schemas.Station]
+    content: list[schemas.StationSchema]

@@ -3,7 +3,7 @@ from datetime import datetime
 from pydantic import BaseModel
 
 
-class Station(BaseModel):
+class StationSchema(BaseModel):
     code: str
     latitude: float
     longitude: float
