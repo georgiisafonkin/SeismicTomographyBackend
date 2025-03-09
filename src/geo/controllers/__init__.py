@@ -3,3 +3,4 @@ from geo.controllers.stats import stats_router
 from geo.controllers.proc import proc_router
 from geo.controllers.geo import geo_router
 from geo.controllers.users import users_router
+from geo.controllers.station import station_router

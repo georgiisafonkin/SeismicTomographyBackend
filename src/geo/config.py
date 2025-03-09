@@ -59,7 +59,7 @@ def load_env_config(env_file: str | os.PathLike = None) -> Config:
     return Config(
         DEBUG=to_bool(get_str_env(DEBUG_ENV)),
         FDSN_BASE=get_str_env(FDSN_BASE_ENV),
-        HPS_ST3D_EXEC=get_str_env(HPS_ST3D_EXEC_ENV)
-        DB_LOGIN=get_str_env(DB_LOGIN)
+        HPS_ST3D_EXEC=get_str_env(HPS_ST3D_EXEC_ENV),
+        DB_LOGIN=get_str_env(DB_LOGIN),
         DB_PASSWORD=get_str_env(DB_PASSWORD)
     )

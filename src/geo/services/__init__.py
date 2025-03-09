@@ -6,6 +6,7 @@ from geo.services.stats import StatsApplicationService
 from geo.services.storage import FileStorage
 from geo.services.task import TaskApplicationService
 from geo.services.users import UsersApplicationService
+from geo.services.station import StationApplicationService
 from geo.utils.queue import Queue
 
 
@@ -46,3 +47,7 @@ class ServiceFactory:
     @property
     def users(self) -> UsersApplicationService:
         return UsersApplicationService(lazy_session=self._lazy_session,)
+    
+    @property
+    def station(self) -> StationApplicationService:
+        return StationApplicationService(lazy_session=self._lazy_session,)
