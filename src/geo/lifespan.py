@@ -20,7 +20,7 @@ async def init_db(app: FastAPI, *, echo: bool = False) -> None:
     getattr(app, "state").db_session = session
 
     async with engine.begin() as conn:
-        # await conn.run_sync(tables.Base.metadata.drop_all)
+        await conn.run_sync(tables.Base.metadata.drop_all)
         await conn.run_sync(tables.Base.metadata.create_all)
 
 

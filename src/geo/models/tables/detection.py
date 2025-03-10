@@ -1,6 +1,6 @@
 import uuid
 
-from sqlalchemy import Column, DOUBLE, ForeignKey, Enum, func, DateTime
+from sqlalchemy import Column, DOUBLE, ForeignKey, Enum, func, DateTime, String
 from sqlalchemy.orm import relationship
 
 from geo.db import Base
@@ -16,7 +16,7 @@ class Detection(Base):
     phase = Column(Enum(Phase), nullable=False)
     time = Column(DOUBLE(), nullable=False)
 
-    station_id = Column(GUID(), ForeignKey("stations.id", ondelete="cascade"), nullable=False)
+    station_id = Column(String, ForeignKey("stations.code", ondelete="cascade"), nullable=False)
     station = relationship("Station", back_populates="detections")
 
     event_id = Column(GUID(), ForeignKey("events.id", ondelete="cascade"), nullable=False)
