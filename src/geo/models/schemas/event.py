@@ -1,16 +1,20 @@
 from datetime import datetime
 
 from pydantic import BaseModel
+from src.geo.models.schemas.pick import Pick
+from typing import List
 
 
 class Event(BaseModel):
-    time: datetime
+    id: int
+    event_time: datetime
     magnitude: float
-    network: str
-    event: str
-    x: float
-    y: float
-    z: float
+    latitude: float
+    longitude: float
+    depth: float
+    network_code: str
+    accepted: bool
+    picks: List[Pick]
 
     class Config:
         from_attributes = True

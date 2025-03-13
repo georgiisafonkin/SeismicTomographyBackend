@@ -5,6 +5,10 @@ from uuid import UUID
 
 from pydantic import BaseModel
 
+from src.geo.models.schemas.station import StationSchema
+from src.geo.models.schemas.event import Event
+
+from typing import List
 
 class TaskState(Enum):
     PLAIN = 'PLAIN'
@@ -29,6 +33,9 @@ class Task(BaseModel):
 
     created_at: datetime
     completed_in: datetime | None
+
+    stations: List[StationSchema]
+    events: List[Event]
 
     class Config:
         from_attributes = True
