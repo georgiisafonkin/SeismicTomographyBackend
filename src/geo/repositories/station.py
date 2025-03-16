@@ -13,10 +13,8 @@ class StationRepo(BaseRepository[Station]):
         params = {
             'network_code': station_request.network_code
         }
-        logger.info(self.AUTH)
         async with aiohttp.ClientSession(auth=aiohttp.BasicAuth(self.DB_LOGIN, self.DB_PASSWORD)) as session:
             async with session.get(url, params=params, auth=aiohttp.BasicAuth(self.DB_LOGIN, self.DB_PASSWORD)) as response:
                 result = await response.json()
-                logger.info(result)
                 return [StationSchema(**st) for st in result]
 

@@ -16,11 +16,11 @@ class Detection(Base):
     phase = Column(Enum(Phase), nullable=False)
     time = Column(DOUBLE(), nullable=False)
 
-    station_id = Column(String, ForeignKey("stations.code", ondelete="cascade"), nullable=False)
-    station = relationship("Station", back_populates="detections")
+    # station_id = Column(String, ForeignKey("stations.code", ondelete="cascade"), nullable=False)
+    # station = relationship("Station", back_populates="detections")
 
-    event_id = Column(GUID(), ForeignKey("events.id", ondelete="cascade"), nullable=False)
-    event = relationship("Event", back_populates="detections")
+    # event_id = Column(GUID(), ForeignKey("events.id", ondelete="cascade"), nullable=False)
+    # event = relationship("Event", back_populates="detections")
 
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 

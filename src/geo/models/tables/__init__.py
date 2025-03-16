@@ -1,9 +1,10 @@
 from geo.db import Base
 
-from .task import Task
-from .station import Station
-from .event import Event
-from .seisdata import SeisData
-from .detection import Detection
-from .tomography import Tomography
-from .users import UserTable
+from src.geo.models.tables.task import Task
+from src.geo.models.tables.station import Station
+from src.geo.models.tables.event import Event
+from src.geo.models.tables.seisdata import SeisData
+from src.geo.models.tables.detection import Detection
+from src.geo.models.tables.tomography import Tomography
+from src.geo.models.tables.users import UserTable
+from src.geo.models.tables.pick import Pick

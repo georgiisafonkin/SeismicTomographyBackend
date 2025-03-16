@@ -1,18 +1,22 @@
-import uuid
-
-from sqlalchemy import Column, VARCHAR, DOUBLE, ForeignKey, func
+from sqlalchemy import Table, Column, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped, mapped_column
 
 from datetime import datetime
 
 from geo.db import Base
-from geo.utils.sa import GUID
 
 from src.geo.models.tables.pick import Pick
 
 from typing import List
 
+event_pick_table = Table(
+    "event_pick_table",
+    Base.metadata,
+    Column("event_id", ForeignKey("events.id")),
+    Column("pick_id", ForeignKey("picks.id")),
+    extend_existing=True
+)
 
 class Event(Base):
     __tablename__ = "events"
@@ -26,7 +30,22 @@ class Event(Base):
     depth: Mapped[float] = mapped_column()
     network_code: Mapped[str] = mapped_column()
     accepted: Mapped[bool] = mapped_column()
-    picks: Mapped[List[Pick]] = mapped_column()
+
+    picks: Mapped[List["Pick"]] = relationship("Pick", secondary=event_pick_table)
+
+    def __repr__(self):
+        return f'<{self.__class__.__name__}: {self.id}>'
+
+
+
+
+
+
+
+
+
+
+
     # TODO корректные отношения с таской
 
 
@@ -44,6 +63,3 @@ class Event(Base):
     # detections = relationship("Detection", back_populates="event")
 
     # created_at = Column(DateTime(timezone=True), server_default=func.now())
-
-    def __repr__(self):
-        return f'<{self.__class__.__name__}: {self.id}>'

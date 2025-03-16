@@ -5,8 +5,8 @@ from uuid import UUID
 
 from pydantic import BaseModel
 
-from src.geo.models.schemas.station import StationSchema
-from src.geo.models.schemas.event import Event
+from geo.models.schemas.station import StationSchema
+from geo.models.schemas.event import Event
 
 from typing import List
 
@@ -34,8 +34,9 @@ class Task(BaseModel):
     created_at: datetime
     completed_in: datetime | None
 
-    stations: List[StationSchema]
-    events: List[Event]
+    # TODO: few models for different requests
+    # stations: List[StationSchema]
+    # events: List[Event]
 
     class Config:
         from_attributes = True

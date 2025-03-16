@@ -1,8 +1,8 @@
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
-from src.geo.models.schemas.station import StationsRequest, StationSchema
-from src.geo.views.station import StationsResponse
-from src.geo.repositories.station import StationRepo
-from src.geo.config import logger
+from geo.models.schemas.station import StationsRequest, StationSchema
+from geo.views.station import StationsResponse
+from geo.repositories.station import StationRepo
+from geo.config import logger
 from typing import List
 
 class StationApplicationService:
@@ -16,7 +16,6 @@ class StationApplicationService:
         async with self._lazy_session() as session:
             station_repo = StationRepo(session)
             stations = await station_repo.fetch_station_by_network(station_request=station_request)
-            logger.info(f"Stations object: {stations}")
             area_stations = list()
             for station in stations:
                 if station_request.min_latitude <= station.latitude <= station_request.max_latitude and \

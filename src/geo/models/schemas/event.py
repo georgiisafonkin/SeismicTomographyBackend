@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from pydantic import BaseModel
-from src.geo.models.schemas.pick import Pick
+from geo.models.schemas.pick import Pick
 from typing import List
 
 

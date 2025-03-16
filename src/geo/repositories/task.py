@@ -1,6 +1,6 @@
-from geo.models import tables
+from src.geo.models.tables.task import Task
 from geo.repositories.base import BaseRepository
 
 
-class TaskRepo(BaseRepository[tables.Task]):
-    table = tables.Task
+class TaskRepo(BaseRepository[Task]):
+    table = Task

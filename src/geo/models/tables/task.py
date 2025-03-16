@@ -1,6 +1,6 @@
 import uuid
 
-from sqlalchemy import Column, Enum, DateTime, func
+from sqlalchemy import Column, Enum, DateTime, func, ForeignKey, Table
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from geo.db import Base
@@ -11,6 +11,21 @@ from src.geo.models.tables.event import Event
 from src.geo.models.tables.station import Station
 from typing import List
 
+task_event_table = Table(
+    "task_event_table",
+    Base.metadata,
+    Column("task_id", ForeignKey("tasks.id")),
+    Column("event_id", ForeignKey("events.id")),
+    extend_existing=True
+)
+
+task_station_table = Table(
+    "task_station_table",
+    Base.metadata,
+    Column("task_id", ForeignKey("tasks.id")),
+    Column("station_code", ForeignKey("stations.code")),
+    extend_existing=True
+)
 
 class Task(Base):
     __tablename__ = "tasks"
@@ -20,8 +35,10 @@ class Task(Base):
     state = Column(Enum(TaskState), default=TaskState.PLAIN, nullable=False)
     step = Column(Enum(TaskStep), nullable=True)
 
-    stations: Mapped[List["Station"]] = relationship(back_populates="task")
-    events: Mapped[List["Event"]] = relationship(back_populates="task")
+
+    stations: Mapped[List["Station"]] = relationship("Station", secondary=task_station_table)
+    events: Mapped[List["Event"]] = relationship("Event", secondary=task_event_table)
+
     seisdata = relationship("SeisData", back_populates="task", uselist=False)
     tomography = relationship("Tomography", back_populates="task", uselist=False)
 
