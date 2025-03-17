@@ -16,7 +16,7 @@ class StationApplicationService:
         async with self._lazy_session() as session:
             station_repo = StationRepo(session)
             stations = await station_repo.fetch_station_by_network(station_request=station_request)
-            area_stations = list()
+            area_stations = []
             for station in stations:
                 if station_request.min_latitude <= station.latitude <= station_request.max_latitude and \
                     station_request.min_longitude <= station.longitude <= station_request.max_longitude:

@@ -12,7 +12,7 @@ from .tomography import Tomography
 from .detection import Detection
 from .detection import Phase
 
-from .event import Event
+from .event import Event, EventsByCoordinates
 from .station import StationSchema
 
 from .users import UserRegisterModel, UserLoginModel

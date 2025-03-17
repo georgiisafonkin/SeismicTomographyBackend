@@ -11,6 +11,7 @@ from geo.controllers import (
     task_router, stats_router, geo_router, users_router, station_router
 )
 from geo.controllers.proc import proc_router
+from geo.controllers.event import event_router
 from geo.exceptions import (
     APIError,
     handle_api_error,
@@ -58,6 +59,7 @@ class ApplicationFactory:
         api_router.include_router(geo_router)
         api_router.include_router(stats_router)
         api_router.include_router(station_router)
+        api_router.include_router(event_router)
         app.include_router(api_router)
         app.include_router(users_router) # TODO add this route by myself
 
