@@ -8,10 +8,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from geo.config import load_env_config
 from geo.controllers import (
-    task_router, stats_router, geo_router, users_router, station_router
+    proc_router, task_router, stats_router, geo_router, users_router, station_router, event_router
 )
-from geo.controllers.proc import proc_router
-from geo.controllers.event import event_router
 from geo.exceptions import (
     APIError,
     handle_api_error,
