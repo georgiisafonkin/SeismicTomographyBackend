@@ -9,18 +9,6 @@ from geo.services import station
 
 station_router = APIRouter(prefix="/stations", tags=["Station"])
 
-# @station_router.get(path="", status_code=http_status.HTTP_202_ACCEPTED)
-# async def get_stations_by_coordinates(
-#         stations_request: StationsRequest,
-#         services: ServiceFactory = Depends(get_services)
-# ) -> StationsResponse:
-#     """
-
-#     Получение станций указанной сети из определённой области 
-    
-#     """
-#     return StationsResponse(content= await services.station.fetch_area_stations(station_request=stations_request))
-
 @station_router.get(path="/", status_code=http_status.HTTP_202_ACCEPTED)
 async def get_stations_by_coordinates(
         min_latitude: float = Query(..., alias="min_latitude"),  # Запрашиваем параметры через Query
