@@ -22,7 +22,7 @@ class EventApplicationService():
                 if event_request.min_latitude <= event.latitude <= event_request.max_latitude and \
                     event_request.min_longitude <= event.longitude <= event_request.max_longitude:
                     area_events.append(EventsByCoordinates(id=event.id,
-                                                                   event_time=event.event_time,
+                                                                   time=event.time,
                                                                    magnitude=event.magnitude,
                                                                    latitude=event.latitude,
                                                                    longitude=event.longitude,
