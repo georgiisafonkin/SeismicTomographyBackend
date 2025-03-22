@@ -23,7 +23,7 @@ class Event(Base):
     __table_args__ = {'extend_existing': True}
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    event_time: Mapped[datetime] = mapped_column()
+    time: Mapped[datetime] = mapped_column()
     magnitude: Mapped[float] = mapped_column()
     latitude: Mapped[float] = mapped_column()
     longitude: Mapped[float] = mapped_column()

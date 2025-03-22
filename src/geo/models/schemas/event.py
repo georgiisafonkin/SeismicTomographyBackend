@@ -7,7 +7,7 @@ from typing import List
 
 class Event(BaseModel):
     id: int
-    event_time: datetime
+    time: datetime
     magnitude: float
     latitude: float
     longitude: float
@@ -31,7 +31,7 @@ class EventRequest(BaseModel):
 
 class EventsByCoordinates(BaseModel):
     id: int
-    event_time: datetime
+    time: datetime
     magnitude: float
     latitude: float
     longitude: float

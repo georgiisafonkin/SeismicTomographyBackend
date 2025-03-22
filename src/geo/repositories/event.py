@@ -4,6 +4,7 @@ from geo.models.schemas.event import Event, EventRequest
 from typing import List
 import aiohttp
 
+from src.geo.config import logger
 class EventRepo(BaseRepository[tables.Event]):
     table = tables.Event
 
@@ -15,4 +16,5 @@ class EventRepo(BaseRepository[tables.Event]):
         async with aiohttp.ClientSession(auth=aiohttp.BasicAuth(self.DB_LOGIN, self.DB_PASSWORD)) as session:
             async with session.get(url, params=params, auth=aiohttp.BasicAuth(self.DB_LOGIN, self.DB_PASSWORD)) as response:
                 result = await response.json()
+                logger.info(f"events: {response}")
                 return [Event(**st) for st in result]
