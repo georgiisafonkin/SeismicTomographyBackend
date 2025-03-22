@@ -31,9 +31,6 @@ class Task(BaseModel):
     state: TaskState
     step: TaskStep | None
 
-    stations: List[StationSchema]
-    events: List[Event]
-
     created_at: datetime
     completed_in: datetime | None
 
