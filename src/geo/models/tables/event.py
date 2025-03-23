@@ -13,8 +13,8 @@ from typing import List
 event_pick_table = Table(
     "event_pick_table",
     Base.metadata,
-    Column("event_id", ForeignKey("events.id")),
-    Column("pick_id", ForeignKey("picks.id")),
+    Column("event_id", ForeignKey("events.id"), primary_key=True),
+    Column("pick_id", ForeignKey("picks.id"), primary_key=True),
     extend_existing=True
 )
 

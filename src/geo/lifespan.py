@@ -10,6 +10,7 @@ from geo.utils.queue import Queue
 
 from geo.services import data_proc
 from geo.services import tomography_proc
+from geo.db import Base
 
 
 async def init_db(app: FastAPI, *, echo: bool = False) -> None:
@@ -67,6 +68,8 @@ class LifeSpan:
         getattr(self._app, "state").tomography_queue = Queue()
         await init_db(self._app, echo=self._config.DEBUG)
         # start_workers(self._app, self._config.FDSN_BASE, self._config.HPS_ST3D_EXEC)
+        for cls in Base.registry.mappers:
+            logging.info(cls.class_)
         logging.info("FastAPI Успешно запущен.")
 
     async def shutdown_handler(self) -> None:

@@ -7,6 +7,7 @@ from pydantic import BaseModel
 
 from geo.models.schemas.station import StationSchema
 from geo.models.schemas.event import Event
+from geo.models.schemas.seisdata import SeisData
 
 from typing import List
 
@@ -34,9 +35,14 @@ class Task(BaseModel):
     created_at: datetime
     completed_in: datetime | None
 
-    # TODO: few models for different requests
-    # stations: List[StationSchema]
-    # events: List[Event]
+    class Config:
+        from_attributes = True
+
+class TaskMetadata(BaseModel):
+    network: str
+    seisdata: SeisData
+    stations: List[StationSchema]
+    events: List[Event]
 
     class Config:
         from_attributes = True

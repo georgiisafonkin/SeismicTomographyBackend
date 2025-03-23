@@ -1,7 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, AsyncEngine, async_sessionmaker
 from sqlalchemy.orm import declarative_base
 
-
 def create_sqlite_async_session(
         database: str,
         echo: bool = False
@@ -26,3 +25,4 @@ def get_db():
 
 engine, session_local = create_sqlite_async_session("test.db")
 Base = declarative_base()
+

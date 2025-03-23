@@ -12,3 +12,6 @@ class TasksResponse(BaseView):
 
 class TaskCountResponse(BaseView):
     content: int
+
+class TaskMetadataResponse(BaseView):
+    content: schemas.TaskMetadata
