@@ -69,4 +69,4 @@ async def update_task_metadata(task_id: TaskID, task_metadata: TaskMetadata, ser
 
 @task_router.get("/{task_id}/metadata", response_model=TaskMetadataResponse, status_code=http_status.HTTP_200_OK)
 async def get_task_metadata(task_id: TaskID, services: ServiceFactory = Depends(get_services)) -> TaskMetadataResponse:
-    await services.task.get_task_metadata(task_id=task_id)
+    return TaskMetadataResponse(content= await services.task.get_task_metadata(task_id=task_id))

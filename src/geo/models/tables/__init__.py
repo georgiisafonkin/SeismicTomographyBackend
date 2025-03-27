@@ -1,6 +1,6 @@
 from geo.db import Base
 
-from src.geo.models.tables.task import Task
+from src.geo.models.tables.task import Task, TaskStationTable, TaskEventTable
 from src.geo.models.tables.station import Station
 from src.geo.models.tables.event import Event
 from src.geo.models.tables.seisdata import SeisData

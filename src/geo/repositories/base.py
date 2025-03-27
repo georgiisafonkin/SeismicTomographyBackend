@@ -33,6 +33,7 @@ class BaseRepository(Generic[T]):
         self._session.add(model)
         if commit:
             await self._session.commit()
+            await self._session.refresh(model)
         return model
 
     async def get(self, **kwargs) -> Optional[T]:

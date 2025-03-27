@@ -8,6 +8,7 @@ from pydantic import BaseModel
 from geo.models.schemas.station import StationSchema
 from geo.models.schemas.event import Event
 from geo.models.schemas.seisdata import SeisData
+from geo.models.schemas.tomography import Tomography
 
 from typing import List
 
@@ -32,6 +33,11 @@ class Task(BaseModel):
     state: TaskState
     step: TaskStep | None
 
+    stations: List[StationSchema] | None
+    events: List[Event] | None
+    seisdata: SeisData | None
+    tomography: Tomography | None
+
     created_at: datetime
     completed_in: datetime | None
 
@@ -39,7 +45,6 @@ class Task(BaseModel):
         from_attributes = True
 
 class TaskMetadata(BaseModel):
-    network: str
     seisdata: SeisData
     stations: List[StationSchema]
     events: List[Event]
