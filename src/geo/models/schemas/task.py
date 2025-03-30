@@ -44,6 +44,16 @@ class Task(BaseModel):
     class Config:
         from_attributes = True
 
+class TaskShort(BaseModel):
+    id: TaskID
+    state: TaskState
+    step: TaskStep | None
+    created_at: datetime
+    completed_in: datetime | None
+
+    class Config:
+        from_attributes = True
+
 class TaskMetadata(BaseModel):
     seisdata: SeisData
     stations: List[StationSchema]

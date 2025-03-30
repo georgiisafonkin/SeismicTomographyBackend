@@ -3,6 +3,7 @@ from .base import BaseView
 from .task import TaskResponse
 from .task import TasksResponse
 from .task import TaskMetadataResponse
+from .task import TaskShortResponse
 
 from .tomography import TomographyResponse
 

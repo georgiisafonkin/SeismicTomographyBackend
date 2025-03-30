@@ -5,8 +5,7 @@ from geo.models.schemas import TaskID, TaskMetadata
 from geo.services import ServiceFactory
 from geo.services.di import get_services
 
-from geo.views.task import TasksResponse, TaskResponse, TaskCountResponse, TaskMetadataResponse
-
+from geo.views.task import TasksResponse, TaskResponse, TaskCountResponse, TaskMetadataResponse, TaskShortResponse
 task_router = APIRouter(prefix="/task", tags=["Task"])
 
 
@@ -32,22 +31,22 @@ async def task_count(services: ServiceFactory = Depends(get_services)):
     return TaskCountResponse(content=await services.task.count())
 
 
-@task_router.get("/{task_id}", response_model=TaskResponse, status_code=http_status.HTTP_200_OK)
+@task_router.get("/{task_id}", response_model=TaskShortResponse, status_code=http_status.HTTP_200_OK)
 async def task(task_id: TaskID, services: ServiceFactory = Depends(get_services)):
     """
     Получить задачу по id
 
     """
-    return TaskResponse(content=await services.task.get_task(task_id))
+    return TaskShortResponse(content=await services.task.get_task(task_id))
 
 
-@task_router.post("", response_model=TaskResponse, status_code=http_status.HTTP_200_OK)
+@task_router.post("", response_model=TaskShortResponse, status_code=http_status.HTTP_200_OK)
 async def new_task(services: ServiceFactory = Depends(get_services)):
     """
     Создать новую задачу
 
     """
-    return TaskResponse(content=await services.task.new_task())
+    return TaskShortResponse(content=await services.task.new_task())
 
 
 @task_router.delete("/{task_id}", response_model=None, status_code=http_status.HTTP_204_NO_CONTENT)

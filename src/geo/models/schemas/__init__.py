@@ -7,6 +7,7 @@ from .task import Task
 from .task import TaskState
 from .task import TaskStep
 from .task import TaskMetadata
+from .task import TaskShort
 
 from .seisdata import SeisData
 from .tomography import Tomography

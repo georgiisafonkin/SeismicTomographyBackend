@@ -3,7 +3,7 @@ import datetime
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
 from geo.exceptions import NotFound
-from geo.models.schemas import TaskID, Task, TaskState, TaskMetadata
+from geo.models.schemas import TaskID, Task, TaskState, TaskMetadata, TaskShort
 from geo.repositories import TaskRepo, SeisDataRepo, EventRepo, PickRepo, StationRepo
 from geo.views.task import TaskMetadataResponse
 
@@ -27,7 +27,7 @@ class TaskApplicationService:
         async with self._lazy_session() as session:
             task_repo = TaskRepo(session)
             tasks = await task_repo.get_all(offset=offset, limit=per_page, order_by='created_at')
-        result = [Task.model_validate(task) for task in tasks]
+        result = [TaskShort.model_validate(task) for task in tasks]
         result.reverse()
         return result
 
@@ -37,7 +37,7 @@ class TaskApplicationService:
             task = await task_repo.get(id=task_id)
         if not task:
             raise NotFound(f"Задача с id {task_id!r} не найдена")
-        return Task.model_validate(task)
+        return TaskShort.model_validate(task)
     
     async def get_task_metadata(self, task_id: TaskID) -> TaskMetadataResponse:
         async with self._lazy_session() as session:
@@ -61,7 +61,7 @@ class TaskApplicationService:
                 created_at=datetime.datetime.now(tz=datetime.UTC)
             )
 
-        return Task.model_validate(task)
+        return TaskShort.model_validate(task)
 
     async def delete_task(self, task_id: TaskID) -> None:
         async with self._lazy_session() as session:
