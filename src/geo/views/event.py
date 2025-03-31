@@ -6,4 +6,4 @@ class EventsResponse(BaseView):
     content: list[schemas.Event]
 
 class EventByCoordinatesResponse(BaseView):
-    content: List[schemas.EventsByCoordinates]
+    content: List[schemas.EventsByParams]

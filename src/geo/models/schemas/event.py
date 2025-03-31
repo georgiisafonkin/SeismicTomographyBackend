@@ -20,16 +20,20 @@ class Event(BaseModel):
         from_attributes = True
 
 class EventRequest(BaseModel):
+    start_time: datetime
+    end_time: datetime
     min_latitude: float
     max_latitude: float
     min_longitude: float
     max_longitude: float
+    min_depth: float
+    max_depth: float
     network_code: str
 
     class Config:
         from_attributes = True
 
-class EventsByCoordinates(BaseModel):
+class EventsByParams(BaseModel):
     id: int
     time: datetime
     magnitude: float

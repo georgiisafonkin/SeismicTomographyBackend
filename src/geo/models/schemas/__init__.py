@@ -14,7 +14,7 @@ from .tomography import Tomography
 from .detection import Detection
 from .detection import Phase
 
-from .event import Event, EventsByCoordinates
+from .event import Event, EventsByParams
 from .station import StationSchema
 
 from .users import UserRegisterModel, UserLoginModel
