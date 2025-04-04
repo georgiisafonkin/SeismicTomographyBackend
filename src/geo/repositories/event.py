@@ -22,10 +22,12 @@ class EventRepo(BaseRepository[tables.Event]):
             'max_lat': event_request.max_latitude,
             'min_lon': event_request.min_longitude,
             'max_lon': event_request.max_longitude,
+            'min_depth': event_request.min_depth,
+            'max_depth': event_request.max_depth,
             'accepted': str(True)
         }
         async with aiohttp.ClientSession(auth=aiohttp.BasicAuth(self.DB_LOGIN, self.DB_PASSWORD)) as session:
             async with session.get(url, params=params, auth=aiohttp.BasicAuth(self.DB_LOGIN, self.DB_PASSWORD)) as response:
-                logger.info(f"RESPONSE: {response}")
+                # logger.info(f"RESPONSE: {await response.json()}")
                 result = await response.json()
                 return [Event(**st) for st in result]
