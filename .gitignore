@@ -113,6 +113,7 @@ database
 test.db
 HPS_ST3D
 openmpi-4.0.0
+Dockerfile
 
 #IDE
 .idea

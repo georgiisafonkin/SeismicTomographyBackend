@@ -4,7 +4,7 @@ from geo.exceptions import NotFound, BadRequest
 from geo.models.schemas import TaskID, TaskState, TaskStep
 from geo.models.schemas.seisdata import SeisData
 from geo.models.schemas.event import Event
-from geo.models.schemas.station import Station
+from geo.models.schemas.station import StationSchema
 from geo.models.schemas.tomography import Tomography
 from geo.repositories import TaskRepo
 from geo.repositories.event import EventRepo
@@ -85,13 +85,13 @@ class GeoApplicationService:
             )
         return [Event.model_validate(event) for event in events]
 
-    async def stations(self, task_id: TaskID) -> list[Station]:
+    async def stations(self, task_id: TaskID) -> list[StationSchema]:
         async with self._lazy_session() as session:
             station_repo = StationRepo(session)
             stations = await station_repo.get_all(
                 task_id=task_id
             )
-        return [Station.model_validate(station) for station in stations]
+        return [StationSchema.model_validate(station) for station in stations]
 
     async def tomography_vtk_3d(self, task_id: TaskID):
         async with self._lazy_session() as session:

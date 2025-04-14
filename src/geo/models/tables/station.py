@@ -1,29 +1,24 @@
-import uuid
-
-from sqlalchemy import Column, VARCHAR, DOUBLE, ForeignKey, DateTime, func
-from sqlalchemy.orm import relationship
-
+from sqlalchemy import Column, String, Float
+from sqlalchemy.orm import Mapped, relationship
 from geo.db import Base
-from geo.utils.sa import GUID
+from typing import List, TYPE_CHECKING
 
+if TYPE_CHECKING:
+    from src.geo.models.tables.task import Task
+else:
+    Task = "Task"
 
 class Station(Base):
     __tablename__ = "stations"
     __table_args__ = {'extend_existing': True}
 
-    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
-    network = Column(VARCHAR(32), nullable=False)
-    station = Column(VARCHAR(32), nullable=False)
-    x = Column(DOUBLE(), nullable=False)
-    y = Column(DOUBLE(), nullable=False)
-    z = Column(DOUBLE(), nullable=False)
-
-    detections = relationship("Detection", back_populates="station")
-
-    task_id = Column(GUID(), ForeignKey("tasks.id", ondelete="cascade"), nullable=False)
-    task = relationship("Task", back_populates="stations")
-
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    code = Column(String, primary_key=True, nullable=False)
+    latitude = Column(Float, nullable=False)
+    longitude = Column(Float, nullable=False)
+    depth = Column(Float, nullable=False)
+    network_code = Column(String, nullable=False)
+    
+    tasks: Mapped[List["Task"]] = relationship(secondary="task_station_table", back_populates="stations")
 
     def __repr__(self):
-        return f'<{self.__class__.__name__}: {self.id}>'
+        return f'<{self.__class__.__name__}: {self.code}>'

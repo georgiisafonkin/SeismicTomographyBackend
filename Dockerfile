@@ -27,6 +27,8 @@ WORKDIR /app/code
 ENV DEBUG=0
 ENV FDSN_BASE="http://84.237.52.214:8000"
 ENV HPS_ST3D_EXEC="/app/HPS_ST3D/bin/HPS_ST3D"
+ENV DB_LOGIN=""
+ENV DB_PASSWORD=""
 ENV PYTHONPATH=/app/code/src
 
 # Запуск FastAPI с помощью Uvicorn

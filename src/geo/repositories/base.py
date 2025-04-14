@@ -1,6 +1,7 @@
 import uuid
 from typing import Generic, Type, TypeVar, Optional
 
+from src.geo.config import get_str_env
 from sqlalchemy import update, delete, func, select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -8,6 +9,13 @@ T = TypeVar('T')
 
 
 class BaseRepository(Generic[T]):
+    SERVER_URL = 'http://84.237.52.214:4010'
+    EVENT = '/api/seis/event/'
+    STATION = '/api/seis/station/'
+    DB_LOGIN=get_str_env("DB_LOGIN")
+    DB_PASSWORD = get_str_env("DB_PASSWORD")
+    AUTH = (DB_LOGIN, DB_PASSWORD)
+    
     table: Type[T]
 
     def __init__(self, session: AsyncSession):
@@ -25,6 +33,7 @@ class BaseRepository(Generic[T]):
         self._session.add(model)
         if commit:
             await self._session.commit()
+            await self._session.refresh(model)
         return model
 
     async def get(self, **kwargs) -> Optional[T]:

@@ -95,7 +95,7 @@ async def worker(
             http_client,
             url=urljoin(fdsn_base, "/fdsnws/station/1/query"),
             params={
-                "network": data.network,
+                "network": data.network_code,
                 "nodata": 404,
             }
         )

@@ -14,7 +14,7 @@ class SeisData(Base):
     id = Column(GUID(), primary_key=True, default=uuid.uuid4)
     start_time = Column(DateTime(timezone=True), nullable=False)
     end_time = Column(DateTime(timezone=True), nullable=False)
-    network = Column(VARCHAR(32), nullable=False)
+    network_code = Column(VARCHAR(32), nullable=False)
     min_latitude = Column(DOUBLE(), nullable=True)
     max_latitude = Column(DOUBLE(), nullable=True)
     min_longitude = Column(DOUBLE(), nullable=True)
